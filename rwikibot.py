@@ -77,6 +77,7 @@ def main():
             push_wiki()
         else:
             pull_wiki()
+        r.clear_authentication()
     else:
         parser.print_help()
 
