@@ -1,0 +1,5 @@
+folder: wiki/
+password: yourPassword
+subreddit: subreddit
+type: mdORhtml
+username: username
