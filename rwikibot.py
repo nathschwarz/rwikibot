@@ -93,7 +93,8 @@ def push_wiki():
         else:
             pagefiles = [ os.path.join(root, f)
                 for root, subfolders, filenames in os.walk(folder)
-                for f in filenames ]
+                for f in filenames
+                if not f[0] == '.']
 
         for pagefile in pagefiles:
             pagename = pagefile.split('/', 1)[1]
