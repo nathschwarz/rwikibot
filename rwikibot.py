@@ -115,7 +115,7 @@ def main():
     if args.verbose:
         logging.basicConfig(level = logging.INFO)
     else:
-        logging.setLevel(level = logging.ERROR)
+        logging.basicConfig(level = logging.ERROR)
     if not args.stdout:
         logging.basicConfig(filename = 'rwikibot.log')
 
