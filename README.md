@@ -94,7 +94,7 @@ Cronjob:
 #!/usr/bin/env bash
 
 cd /path/to/repo
-git submodule update #or git pull if you use a single repo without collaboration with others
+git submodule foreach 'git pull' #or git pull if you use a single repo without collaboration with others
 python rwikibot.py --push
 ```
 
