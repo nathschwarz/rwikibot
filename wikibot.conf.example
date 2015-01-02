@@ -1,5 +1,5 @@
 password: yourPassword
-username: yourUsername
+username: yourUsername (password and username aren't needed - you'll be prompted when they are missing)
 type: md or html
 subreddits:
     subreddit1:
