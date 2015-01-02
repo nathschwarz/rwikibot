@@ -75,13 +75,11 @@ username: username
 type: md
 subreddits:
     subreddit1:
-        folder: subreddit1
         restrict_to:
             - config/stylesheet
             - index
             - contributions
     subreddit2:
-        folder: subreddit2
         restrict_to:
             - config/sidebar
             - index
