@@ -80,7 +80,7 @@ def do(action = 'pull'):
                 push_page(key, folder, pagefile)
 
 
-def pull_page(folder, pagefile):
+def pull_page(folder, page):
     pagename = page.page
     filename = folder + pagename
 
