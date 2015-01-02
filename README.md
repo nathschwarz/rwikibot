@@ -75,13 +75,11 @@ username: username
 type: md
 subreddits:
     subreddit1:
-        folder: subreddit1
         restrict_to:
             - config/stylesheet
             - index
             - contributions
     subreddit2:
-        folder: subreddit2
         restrict_to:
             - config/sidebar
             - index
@@ -93,7 +91,7 @@ Push wiki pages: `py rwikibot.py --push`
 
 Cronjob:
 ```
-#!/usr/sbin/env bash
+#!/usr/bin/env bash
 
 cd /path/to/repo
 git submodule update #or git pull if you use a single repo without collaboration with others
