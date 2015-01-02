@@ -98,6 +98,9 @@ git submodule foreach 'git pull' #or git pull if you use a single repo without c
 python rwikibot.py --push
 ```
 
+##python packages:
+`sudo pip3 install praw pyaml logging argparse`
+
 ##Attention!
 This includes config-files like the stylesheet. This probably lead to problems
 with changes done online or restricted access.
