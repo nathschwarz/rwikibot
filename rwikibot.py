@@ -45,35 +45,59 @@ def login():
         logging.error(e)
 
 def pull_wiki():
-    pages = r.get_wiki_pages(conf['subreddit'])
-    for page in pages:
-        pagename = page.page
-        filename = conf['folder'] + pagename
-        if '/' in pagename:
-            # use of filename to assure that wiki/ is being created
-            dirs = filename.rsplit('/', 1)[0]
-            if not os.path.exists(dirs):
-                os.makedirs(dirs)
-                logging.info('Created directory ' + dirs)
-        with open(filename, 'w') as f:
-            if conf['type'] == 'html':
-                f.write(page.content_html)
-            else:
-                f.write(page.content_md)
-            logging.info('Wrote file ' + filename)
+    subreddits = conf['subreddits']
+
+    for key in subreddits:
+        subreddit = subreddits[key]
+        if 'folder' in subreddit.keys():
+            folder = subreddit['folder']
+        else:
+            folder = key
+        folder += '/'
+
+        pages = r.get_wiki_pages(key)
+        for page in pages:
+            pagename = page.page
+            filename = folder + pagename
+
+            if '/' in pagename:
+                # use of filename to assure that top-folder is being created
+                dirs = filename.rsplit('/', 1)[0]
+                if not os.path.exists(dirs):
+                    os.makedirs(dirs)
+                    logging.info('Created directory ' + dirs)
+
+            with open(filename, 'w') as f:
+                if conf['type'] == 'html':
+                    f.write(page.content_html)
+                else:
+                    f.write(page.content_md)
+                logging.info('Wrote file ' + filename)
 
 def push_wiki():
-    if conf['restrict_to']:
-        pagefiles = conf['restrict_to']
-    else:
-        pagefiles = [ os.path.join(root, f)
-            for root, subfolders, filenames in os.walk(conf['folder'])
-            for f in filenames ]
-    for pagefile in pagefiles:
-        pagename = pagefile.split('/', 1)[1]
-        with open(pagefile, 'r') as f:
-            r.edit_wiki_page(conf['subreddit'], pagename, f.read())
-        logging.info('Uploaded wiki page ' + pagename)
+    subreddits = conf['subreddits']
+
+    for key in subreddits:
+        subreddit = subreddits[key]
+
+        if 'folder' in subreddit.keys():
+            folder = subreddit['folder']
+        else:
+            folder = key
+        folder += '/'
+
+        if 'restrict_to' in subreddit.keys():
+            pagefiles = [ folder + pagefile for pagefile in subreddit['restrict_to'] ]
+        else:
+            pagefiles = [ os.path.join(root, f)
+                for root, subfolders, filenames in os.walk(folder)
+                for f in filenames ]
+
+        for pagefile in pagefiles:
+            pagename = pagefile.split('/', 1)[1]
+            with open(pagefile, 'r') as f:
+                r.edit_wiki_page(key, pagename, f.read())
+            logging.info('Uploaded wiki page ' + pagename)
 
 def main():
     parser = argparse.ArgumentParser()

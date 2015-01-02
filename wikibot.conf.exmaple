@@ -1,7 +1,17 @@
-folder: wiki/
 password: yourPassword
-subreddit: subreddit
-type: mdORhtml
-username: username
-restrict_to:
-- wiki/index
+username: yourUsername
+type: md or html
+subreddits:
+    subreddit1:
+        restrict_to:
+            - filesHere
+            - will/be/uploaded
+            - others
+            - won't
+    subreddit2:
+        folder: 'foldername/to/use/if/not/subredditname'
+    subreddit3:
+        folder: 'this/works/also/with/restrict_to'
+        restrict_to:
+            - some
+            - files
