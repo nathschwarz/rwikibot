@@ -53,7 +53,8 @@ def pull_wiki():
             folder = subreddit['folder']
         else:
             folder = key
-        folder += '/'
+        if not folder == '':
+            folder += '/'
 
         pages = r.get_wiki_pages(key)
         for page in pages:
@@ -84,7 +85,8 @@ def push_wiki():
             folder = subreddit['folder']
         else:
             folder = key
-        folder += '/'
+        if not folder == '':
+            folder += '/'
 
         if 'restrict_to' in subreddit.keys():
             pagefiles = [ folder + pagefile for pagefile in subreddit['restrict_to'] ]
