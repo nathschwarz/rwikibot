@@ -109,3 +109,8 @@ This includes config-files like the stylesheet. This probably lead to problems
 with changes done online or restricted access.
 
 Use 'restrict_to' in such a case to only upload and download specific files.
+
+##Known issues
+If the config/ folder doesn't show up, you have to edit
+something in there first - be it the stylesheet, sidebar or
+submit_text.
