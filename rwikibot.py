@@ -115,16 +115,15 @@ def main():
     if args.verbose:
         logging.basicConfig(level = logging.INFO)
     else:
-        logging.basicConfig(level = logging.ERROR)
+        logging.setLevel(level = logging.ERROR)
     if not args.stdout:
         logging.basicConfig(filename = 'rwikibot.log')
 
-    if args.push or args.pull:
+    if args.action is not None:
         load_config()
         login()
         try:
-            if args.action:
-                do(action)
+            do(args.action)
         except Exception as e:
             logging.error(e)
         r.clear_authentication()
