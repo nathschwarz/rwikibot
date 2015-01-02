@@ -108,8 +108,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-v", "--verbose", action="store_true", help="verbose output")
     parser.add_argument("--stdout", action="store_true", help="print log output to stdout")
-    parser.add_argument("-d" , "--pull", action="store_true", help="pull wikis from reddit")
-    parser.add_argument("-u", "--push", action="store_true", help="push files to reddit wikis")
+    parser.add_argument("-d" , "--pull", action="store_const", help="pull wikis from reddit", dest = 'action', const = 'pull')
+    parser.add_argument("-u", "--push", action="store_const", help="push files to reddit wikis", dest = 'action', const = 'push')
     args = parser.parse_args()
 
     if args.verbose:
@@ -123,10 +123,8 @@ def main():
         load_config()
         login()
         try:
-            if args.push:
-                do(action = 'push')
-            else:
-                do(action = 'pull')
+            if args.action:
+                do(action)
         except Exception as e:
             logging.error(e)
         r.clear_authentication()
