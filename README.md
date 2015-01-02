@@ -91,6 +91,15 @@ subreddits:
 Pull wiki pages: `py rwikibot.py --pull`  
 Push wiki pages: `py rwikibot.py --push`
 
+Cronjob:
+```
+#!/usr/sbin/env bash
+
+cd /path/to/repo
+git submodule update #or git pull if you use a single repo without collaboration with others
+python rwikibot.py --push
+```
+
 ##Attention!
 This includes config-files like the stylesheet. This probably lead to problems
 with changes done online or restricted access.
