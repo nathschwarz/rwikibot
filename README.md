@@ -2,10 +2,14 @@
 A bot to pull and push subreddit wikis. Enables to use preferred editors and
 version control.
 
+Well, at least it is meant as a bot. You can use it as a script. The bot
+functionality would be to setup a cronjob on a server to pull changes from
+a git-repositoy and to push them to reddit.
+
 ##Usage
 Do as you please:
 
-###Submodule:
+###Submodule in existing repo:
 Folder structure:
 ```
 .
@@ -36,6 +40,53 @@ Folder structure:
 │   │   └── stylesheet
 │   └── index
 └── wikibot.conf
+```
+Pull wiki pages: `py rwikibot.py --pull`  
+Push wiki pages: `py rwikibot.py --push`
+
+###Script with multiple submodules:
+Folder structure:
+```
+.
+├── .gitignore
+├── .gitmodules
+│── rwikibot.py
+├── subreddit1
+│   ├── config
+│   │   └── stylesheet
+│   ├── index
+│   └── contributions
+├── subreddit2
+│   ├── config
+│   │   └── sidebar
+│   └── index
+├── subreddit3foldername
+│   ├── config
+│   │   ├── sidebar
+│   │   ├── description
+│   │   └── submit_text
+│   └── index
+└── wikibot.conf
+```
+wikibot.conf:
+```
+password: password
+username: username
+type: md
+subreddits:
+    subreddit1:
+        folder: subreddit1
+        restrict_to:
+            - config/stylesheet
+            - index
+            - contributions
+    subreddit2:
+        folder: subreddit2
+        restrict_to:
+            - config/sidebar
+            - index
+    subreddit3:
+        folder: subreddit3foldername
 ```
 Pull wiki pages: `py rwikibot.py --pull`  
 Push wiki pages: `py rwikibot.py --push`
