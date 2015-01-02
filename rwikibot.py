@@ -8,9 +8,9 @@ import os
 import argparse
 
 #logging defaults
-# logging.basicConfig(filename = 'rwikibot.log', level = logging.ERROR)
+logging.basicConfig(filename = 'rwikibot.log', level = logging.ERROR)
 
-user_agent = 'reddit wiki bot v0.1 by /u/nath_schwarz'
+user_agent = 'reddit wiki bot v1.0 by /u/nath_schwarz'
 conf_file = 'wikibot.conf'
 
 #globals
