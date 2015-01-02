@@ -41,57 +41,32 @@ def login():
     except Exception as e:
         logging.error(e)
 
-def pull_wiki():
+def get_folder(subreddit, key):
+    if 'folder' in subreddit.keys():
+        folder = subreddit['folder']
+    else:
+        folder = key
+    if not folder == '':
+        folder += '/'
+    return folder
+
+def do(action = 'pull'):
     subreddits = conf['subreddits']
 
     for key in subreddits:
         subreddit = subreddits[key]
-        if 'folder' in subreddit.keys():
-            folder = subreddit['folder']
-        else:
-            folder = key
-        if not folder == '':
-            folder += '/'
+        folder = get_folder(subreddit, key)
 
-        pages = r.get_wiki_pages(key)
-        for page in pages:
-            pagename = page.page
-            filename = folder + pagename
-
-            if '/' in pagename:
-                # use of filename to assure that top-folder is being created
-                dirs = filename.rsplit('/', 1)[0]
-                if not os.path.exists(dirs):
-                    os.makedirs(dirs)
-                    logging.info('Created directory ' + dirs)
-
-            with open(filename, 'w') as f:
-                if conf['type'] == 'html':
-                    f.write(page.content_html)
-                else:
-                    f.write(page.content_md)
-                logging.info('Wrote file ' + filename)
-
-def push_wiki():
-    subreddits = conf['subreddits']
-
-    for key in subreddits:
-        subreddit = subreddits[key]
-
-        if 'push' in subreddit.keys():
-            if subreddit['push'] is False:
-                logging.info('subreddit ' + key + ' not pushed')
+        if action in subreddit.keys():
+            if subreddit[action] is False:
+                logging.info('Subreddit ' + key + ' not ' + action + 'ed, key is false')
                 break
 
-        if 'folder' in subreddit.keys():
-            folder = subreddit['folder']
-        else:
-            folder = key
-        if not folder == '':
-            folder += '/'
-
-        if 'restrict_to' in subreddit.keys():
-            pagefiles = [ folder + pagefile for pagefile in subreddit['restrict_to'] ]
+        restrict = action + '_restrict_to'
+        if restrict in subreddit.keys():
+            pagefiles = [ folder + pagefile for pagefile in subreddit[restrict] ]
+        elif action == 'pull':
+            pagefiles = r.get_wiki_pages(key)
         else:
             pagefiles = [ os.path.join(root, f)
                 for root, subfolders, filenames in os.walk(folder)
@@ -99,10 +74,35 @@ def push_wiki():
                 if not f[0] == '.']
 
         for pagefile in pagefiles:
-            pagename = pagefile.split('/', 1)[1]
-            with open(pagefile, 'r') as f:
-                r.edit_wiki_page(key, pagename, f.read())
-            logging.info('Uploaded wiki page ' + pagename)
+            if action == 'pull':
+                pull_page(folder, pagefile)
+            else:
+                push_page(key, folder, pagefile)
+
+
+def pull_page(folder, pagefile):
+    pagename = page.page
+    filename = folder + pagename
+
+    if '/' in pagename:
+        # use of filename to assure that top-folder is being created
+        dirs = filename.rsplit('/', 1)[0]
+        if not os.path.exists(dirs):
+            os.makedirs(dirs)
+            logging.info('Created directory ' + dirs)
+
+    with open(filename, 'w') as f:
+        if conf['type'] == 'html':
+            f.write(page.content_html)
+        else:
+            f.write(page.content_md)
+        logging.info('Pulled page to file ' + filename)
+
+def push_page(key, folder, pagefile):
+    pagename = pagefile.split('/', 1)[1]
+    with open(pagefile, 'r') as f:
+        r.edit_wiki_page(key, pagename, f.read())
+    logging.info('Uploaded wiki page ' + pagename)
 
 def main():
     parser = argparse.ArgumentParser()
@@ -124,9 +124,9 @@ def main():
         login()
         try:
             if args.push:
-                push_wiki()
+                do(action = 'push')
             else:
-                pull_wiki()
+                do(action = 'pull')
         except Exception as e:
             logging.error(e)
         r.clear_authentication()
