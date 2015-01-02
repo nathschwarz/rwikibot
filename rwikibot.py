@@ -60,7 +60,7 @@ def do(action = 'pull'):
         if action in subreddit.keys():
             if subreddit[action] is False:
                 logging.info('Subreddit ' + key + ' not ' + action + 'ed, key is false')
-                break
+                continue
 
         restrict = action + '_restrict_to'
         if restrict in subreddit.keys():
