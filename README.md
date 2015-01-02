@@ -7,49 +7,24 @@ functionality would be to setup a cronjob on a server to pull changes from
 a git-repositoy and to push them to reddit.
 
 ##Usage
-Do as you please:
-
-###Submodule in existing repo:
-Folder structure:
-```
-.
-├── .gitignore
-├── .gitmodules
-├── rwikibot
-│   ├── .gitignore
-│   ├── rwikibot.py
-│   └── wikibot.conf.exmaple
-├── wiki
-│   ├── config
-│   │   └── stylesheet
-│   └── index
-└── wikibot.conf
-```
-Pull wiki pages: `py rwikibot/rwikibot.py --pull`  
-Push wiki pages: `py rwikibot/rwikibot.py --push`
-
-###Script in dir:
-Folder structure:
-```
-.
-├── .gitignore
-├── .gitmodules
-│── rwikibot.py
-├── wiki
-│   ├── config
-│   │   └── stylesheet
-│   └── index
-└── wikibot.conf
-```
-Pull wiki pages: `py rwikibot.py --pull`  
-Push wiki pages: `py rwikibot.py --push`
+Do as you please, add it as submodule, fork it and use it
+directly, only pull the script, ...
 
 ###Script with multiple submodules:
+This is the way I use it, very convenient for multiple repos
+and both for bot- and own use.
+
+rwikibot, subreddit{1,2} and subreddit3foldername are added
+as submodules. This allows to update all with `git submodule
+foreach 'git pull'`, while still being able to commit
+changes.
+
 Folder structure:
 ```
 .
 ├── .gitignore
 ├── .gitmodules
+├── cronjob.bash
 ├── rwikibot
 │   ├── .gitignore
 │   ├── rwikibot.py
@@ -90,7 +65,8 @@ subreddits:
         folder: subreddit3foldername
 ```
 Pull wiki pages: `py rwikibot/rwikibot.py --pull`  
-Push wiki pages: `py rwikibot/rwikibot.py --push`
+Push wiki pages: `py rwikibot/rwikibot.py --push`  
+Symlinks are recommended.
 
 Cronjob:
 ```
