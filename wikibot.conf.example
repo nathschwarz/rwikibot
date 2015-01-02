@@ -15,3 +15,5 @@ subreddits:
         restrict_to:
             - some
             - files
+    subreddit4:
+        push: False #this subreddit is only pulled, not pushed

@@ -81,6 +81,10 @@ def push_wiki():
     for key in subreddits:
         subreddit = subreddits[key]
 
+        if 'push' in subreddit.keys():
+            if subreddit['push'] is False:
+                break
+
         if 'folder' in subreddit.keys():
             folder = subreddit['folder']
         else:
