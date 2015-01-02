@@ -11,12 +11,13 @@ import argparse
 # logging.basicConfig(filename = 'rwikibot.log', level = logging.ERROR)
 
 user_agent = 'reddit wiki bot v0.1 by /u/nath_schwarz'
+conf_file = 'wikibot.conf'
 
 #globals
 r = None
 conf = None
 
-def load_config(conf_file = 'wikibot.conf'):
+def load_config():
     """Loads configuration from 'cspaperbot.conf' and returns it."""
     global conf
     try:
