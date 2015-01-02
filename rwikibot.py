@@ -111,10 +111,13 @@ def main():
     if args.push or args.pull:
         load_config()
         login()
-        if args.push:
-            push_wiki()
-        else:
-            pull_wiki()
+        try:
+            if args.push:
+                push_wiki()
+            else:
+                pull_wiki()
+        except Exception as e:
+            logging.error(e)
         r.clear_authentication()
     else:
         parser.print_help()
