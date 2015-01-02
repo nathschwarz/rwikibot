@@ -21,7 +21,7 @@ Folder structure:
 │   └── index
 └── wikibot.conf
 ```
-Pull wiki pages: `py rwikibot/rwikibot.py --pull`
+Pull wiki pages: `py rwikibot/rwikibot.py --pull`  
 Push wiki pages: `py rwikibot/rwikibot.py --push`
 
 ###Script in dir:
@@ -37,7 +37,7 @@ Folder structure:
 │   └── index
 └── wikibot.conf
 ```
-Pull wiki pages: `py rwikibot.py --pull`
+Pull wiki pages: `py rwikibot.py --pull`  
 Push wiki pages: `py rwikibot.py --push`
 
 ##Attention!
