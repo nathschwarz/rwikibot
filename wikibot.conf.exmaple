@@ -3,3 +3,5 @@ password: yourPassword
 subreddit: subreddit
 type: mdORhtml
 username: username
+restrict_to:
+- wiki/index

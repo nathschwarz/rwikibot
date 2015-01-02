@@ -63,7 +63,10 @@ def pull_wiki():
             logging.info('Wrote file ' + filename)
 
 def push_wiki():
-    pagefiles = [ os.path.join(root, f)
+    if conf['restrict_to']:
+        pagefiles = conf['restrict_to']
+    else:
+        pagefiles = [ os.path.join(root, f)
             for root, subfolders, filenames in os.walk(conf['folder'])
             for f in filenames ]
     for pagefile in pagefiles:

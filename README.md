@@ -14,3 +14,5 @@ your local files to the subreddits' wiki execute `python rwikibot/rwikibot.py
 ##Attention!
 This includes config-files like the stylesheet. This probably lead to problems
 with changes done online.
+
+Use 'restrict_to' in such a case to only upload specific files.
