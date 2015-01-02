@@ -7,9 +7,6 @@ import logging
 import os
 import argparse
 
-#logging defaults
-logging.basicConfig(filename = 'rwikibot.log', level = logging.ERROR)
-
 user_agent = 'reddit wiki bot v1.0 by /u/nath_schwarz'
 conf_file = 'wikibot.conf'
 
@@ -83,6 +80,7 @@ def push_wiki():
 
         if 'push' in subreddit.keys():
             if subreddit['push'] is False:
+                logging.info('subreddit ' + key + ' not pushed')
                 break
 
         if 'folder' in subreddit.keys():
@@ -108,10 +106,18 @@ def push_wiki():
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-v", "--verbose", help="verbose output", action="store_true")
-    parser.add_argument("-d" , "--pull", action="store_true", help="pull wiki from reddit")
-    parser.add_argument("-u", "--push", action="store_true", help="push files to reddit wiki")
+    parser.add_argument("-v", "--verbose", action="store_true", help="verbose output")
+    parser.add_argument("--stdout", action="store_true", help="print log output to stdout")
+    parser.add_argument("-d" , "--pull", action="store_true", help="pull wikis from reddit")
+    parser.add_argument("-u", "--push", action="store_true", help="push files to reddit wikis")
     args = parser.parse_args()
+
+    if args.verbose:
+        logging.basicConfig(level = logging.INFO)
+    else:
+        logging.basicConfig(level = logging.ERROR)
+    if not args.stdout:
+        logging.basicConfig(filename = 'rwikibot.log')
 
     if args.push or args.pull:
         load_config()
