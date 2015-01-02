@@ -50,7 +50,10 @@ Folder structure:
 .
 ├── .gitignore
 ├── .gitmodules
-│── rwikibot.py
+├── rwikibot
+│   ├── .gitignore
+│   ├── rwikibot.py
+│   └── wikibot.conf.exmaple
 ├── subreddit1
 │   ├── config
 │   │   └── stylesheet
@@ -95,7 +98,7 @@ Cronjob:
 
 cd /path/to/repo
 git submodule foreach 'git pull' #or git pull if you use a single repo without collaboration with others
-python rwikibot.py --push
+python rwikibot/rwikibot.py --push
 ```
 
 ##python packages:
