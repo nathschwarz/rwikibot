@@ -27,11 +27,19 @@ def load_config():
         logging.error(e)
 
 def login():
-    """Logs in to reddit with given username and password, returns reddit-instance."""
+    """Logs in to reddit with given username and password, returns reddit-instance.
+
+    Prompts if username or password is missing."""
     global r
     try:
         r = praw.Reddit(user_agent = user_agent)
-        r.login(conf['username'], conf['password'])
+        if not conf['password']:
+            if not conf['username']:
+                r.login()
+            else:
+                r.login(conf['username'])
+        else:
+            r.login(conf['username'], conf['password'])
         logging.info('Login successful')
     except Exception as e:
         logging.error(e)
