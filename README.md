@@ -89,8 +89,8 @@ subreddits:
     subreddit3:
         folder: subreddit3foldername
 ```
-Pull wiki pages: `py rwikibot.py --pull`  
-Push wiki pages: `py rwikibot.py --push`
+Pull wiki pages: `py rwikibot/rwikibot.py --pull`  
+Push wiki pages: `py rwikibot/rwikibot.py --push`
 
 Cronjob:
 ```
