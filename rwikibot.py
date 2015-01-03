@@ -50,28 +50,30 @@ def get_folder(subreddit, key):
         folder += '/'
     return folder
 
+def get_pagefiles(action, subreddit):
+    restricts = [action + '_restrict_to', 'restrict_to']
+    for restrict in restricts:
+        if restrict in subreddit.keys():
+            return [ folder + pagefile for pagefile in subreddit[restrict] ]
+    else:
+        return [ os.path.join(root, f)
+            for root, subfolders, filenames in os.walk(folder)
+            for f in filenames
+            if not f[0] == '.']
+
 def do(action = 'pull'):
     subreddits = conf['subreddits']
 
     for key in subreddits:
         subreddit = subreddits[key]
-        folder = get_folder(subreddit, key)
 
         if action in subreddit.keys():
             if subreddit[action] is False:
                 logging.info('Subreddit ' + key + ' not ' + action + 'ed, key is false')
                 continue
 
-        restrict = action + '_restrict_to'
-        if restrict in subreddit.keys():
-            pagefiles = [ folder + pagefile for pagefile in subreddit[restrict] ]
-        elif action == 'pull':
-            pagefiles = r.get_wiki_pages(key)
-        else:
-            pagefiles = [ os.path.join(root, f)
-                for root, subfolders, filenames in os.walk(folder)
-                for f in filenames
-                if not f[0] == '.']
+        folder = get_folder(subreddit, key)
+        pagefiles = get_pagefiles(action, subreddit)
 
         for pagefile in pagefiles:
             if action == 'pull':

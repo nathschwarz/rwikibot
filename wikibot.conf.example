@@ -3,16 +3,16 @@ username: yourUsername (password and username aren't needed - you'll be prompted
 type: md or html
 subreddits:
     subreddit1:
-        restrict_to:
+        restrict_to: #only these files will be pulled and pushed
             - filesHere
-            - will/be/uploaded
+            - will/be/uploaded #subdirs are created automatically
             - others
             - won't
     subreddit2:
         folder: 'foldername/to/use/if/not/subredditname'
     subreddit3:
         folder: 'this/works/also/with/restrict_to'
-        restrict_to:
+        push_restrict_to: #only these files will be pushed, all will be pulled
             - some
             - files
     subreddit4:
