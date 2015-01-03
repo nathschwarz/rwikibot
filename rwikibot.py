@@ -50,7 +50,7 @@ def get_folder(subreddit, key):
         folder += '/'
     return folder
 
-def get_pagefiles(action, subreddit):
+def get_pagefiles(action, subreddit, folder):
     restricts = [action + '_restrict_to', 'restrict_to']
     for restrict in restricts:
         if restrict in subreddit.keys():
@@ -74,7 +74,7 @@ def do(action = 'pull'):
                 continue
 
         folder = get_folder(subreddit, key)
-        pagefiles = get_pagefiles(action, subreddit)
+        pagefiles = get_pagefiles(action, subreddit, folder)
 
         for pagefile in pagefiles:
             if action == 'pull':
