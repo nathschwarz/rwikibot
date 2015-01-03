@@ -65,6 +65,7 @@ def do(action = 'pull'):
     subreddits = conf['subreddits']
 
     for key in subreddits:
+        logging.info('Subreddit ' + key)
         subreddit = subreddits[key]
 
         if action in subreddit.keys():
