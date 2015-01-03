@@ -42,6 +42,7 @@ def login():
         logging.error(e)
 
 def get_folder(subreddit, key):
+    logging.info('Getting folder')
     if 'folder' in subreddit.keys():
         folder = subreddit['folder']
     else:
@@ -50,18 +51,22 @@ def get_folder(subreddit, key):
         folder += '/'
     return folder
 
-def get_pagefiles(action, subreddit, folder):
+def get_pagefiles(action, subreddit, folder, key):
     restricts = [action + '_restrict_to', 'restrict_to']
+    logging.info('Getting pagefiles')
     for restrict in restricts:
         if restrict in subreddit.keys():
             return [ folder + pagefile for pagefile in subreddit[restrict] ]
     else:
-        return [ os.path.join(root, f)
-            for root, subfolders, filenames in os.walk(folder)
-            for f in filenames
-            if not f[0] == '.']
+        if action == 'pull':
+            return r.get_wiki_pages(key)
+        else:
+            return [ os.path.join(root, f)
+                for root, subfolders, filenames in os.walk(folder)
+                for f in filenames
+                if not f[0] == '.']
 
-def do(action = 'pull'):
+def do(action):
     subreddits = conf['subreddits']
 
     for key in subreddits:
@@ -74,7 +79,7 @@ def do(action = 'pull'):
                 continue
 
         folder = get_folder(subreddit, key)
-        pagefiles = get_pagefiles(action, subreddit, folder)
+        pagefiles = get_pagefiles(action, subreddit, folder, key)
 
         for pagefile in pagefiles:
             if action == 'pull':
@@ -86,6 +91,7 @@ def do(action = 'pull'):
 def pull_page(folder, page):
     pagename = page.page
     filename = folder + pagename
+    logging.info('Pulling page to file ' + filename)
 
     if '/' in pagename:
         # use of filename to assure that top-folder is being created
@@ -99,13 +105,12 @@ def pull_page(folder, page):
             f.write(page.content_html)
         else:
             f.write(page.content_md)
-        logging.info('Pulled page to file ' + filename)
 
 def push_page(key, folder, pagefile):
     pagename = pagefile.split('/', 1)[1]
+    logging.info('Uploading wiki page ' + pagename)
     with open(pagefile, 'r') as f:
         r.edit_wiki_page(key, pagename, f.read())
-    logging.info('Uploaded wiki page ' + pagename)
 
 def main():
     parser = argparse.ArgumentParser()
