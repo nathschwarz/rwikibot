@@ -13,6 +13,7 @@ conf_file = 'wikibot.conf'
 #globals
 r = None
 conf = None
+logger = None
 
 def load_config():
     """Loads configuration from 'cspaperbot.conf' and returns it."""
@@ -21,7 +22,7 @@ def load_config():
         with open(conf_file, 'r') as f:
             conf = yaml.load(f)
     except Exception as e:
-        logging.error(e)
+        logger.error(e)
 
 def login():
     """Logs in to reddit with given username and password, returns reddit-instance.
@@ -37,12 +38,12 @@ def login():
                 r.login(conf['username'])
         else:
             r.login(conf['username'], conf['password'])
-        logging.info('Login successful')
+        logger.info('Login successful')
     except Exception as e:
-        logging.error(e)
+        logger.error(e)
 
 def get_folder(subreddit, key):
-    logging.info('Getting folder')
+    logger.info('Getting folder')
     if 'folder' in subreddit.keys():
         folder = subreddit['folder']
     else:
@@ -53,7 +54,7 @@ def get_folder(subreddit, key):
 
 def get_pagefiles(action, subreddit, folder, key):
     restricts = [action + '_restrict_to', 'restrict_to']
-    logging.info('Getting pagefiles')
+    logger.info('Getting pagefiles')
     for restrict in restricts:
         if restrict in subreddit.keys():
             return [ folder + pagefile for pagefile in subreddit[restrict] ]
@@ -70,12 +71,12 @@ def do(action):
     subreddits = conf['subreddits']
 
     for key in subreddits:
-        logging.info('Subreddit ' + key)
+        logger.info('Subreddit ' + key)
         subreddit = subreddits[key]
 
         if action in subreddit.keys():
             if subreddit[action] is False:
-                logging.info('Subreddit ' + key + ' not ' + action + 'ed, key is false')
+                logger.info('Subreddit ' + key + ' not ' + action + 'ed, key is false')
                 continue
 
         folder = get_folder(subreddit, key)
@@ -91,14 +92,14 @@ def do(action):
 def pull_page(folder, page):
     pagename = page.page
     filename = folder + pagename
-    logging.info('Pulling page to file ' + filename)
+    logger.info('Pulling page to file ' + filename)
 
     if '/' in pagename:
         # use of filename to assure that top-folder is being created
         dirs = filename.rsplit('/', 1)[0]
         if not os.path.exists(dirs):
             os.makedirs(dirs)
-            logging.info('Created directory ' + dirs)
+            logger.info('Created directory ' + dirs)
 
     with open(filename, 'w') as f:
         if conf['type'] == 'html':
@@ -108,7 +109,7 @@ def pull_page(folder, page):
 
 def push_page(key, folder, pagefile):
     pagename = pagefile.split('/', 1)[1]
-    logging.info('Uploading wiki page ' + pagename)
+    logger.info('Uploading wiki page ' + pagename)
     with open(pagefile, 'r') as f:
         r.edit_wiki_page(key, pagename, f.read())
 
@@ -120,12 +121,14 @@ def main():
     parser.add_argument("-u", "--push", action="store_const", help="push files to reddit wikis", dest = 'action', const = 'push')
     args = parser.parse_args()
 
+    global logger
     if args.verbose:
         logging.basicConfig(level = logging.INFO)
     else:
         logging.basicConfig(level = logging.ERROR)
     if not args.stdout:
         logging.basicConfig(filename = 'rwikibot.log')
+    logger = logging.getLogger('rwikibot')
 
     if args.action is not None:
         load_config()
@@ -133,7 +136,7 @@ def main():
         try:
             do(args.action)
         except Exception as e:
-            logging.error(e)
+            logger.error(e)
         r.clear_authentication()
     else:
         parser.print_help()
